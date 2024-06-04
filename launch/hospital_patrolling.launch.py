@@ -76,7 +76,7 @@ def generate_launch_description():
     room_patrol_mission_cmd = Node(
         package="merlin2_hospital_patrolling",
         executable="merlin2_room_patrol_mission_node",
-        name="merlin2_mission_node",
+        name="room_patrol_mission_node",
         parameters=[{
             "dao_family": dao_family,
             "mongo_uri": mongo_uri
@@ -87,7 +87,7 @@ def generate_launch_description():
     room_patrol_action_cmd = Node(
         package="merlin2_hospital_patrolling",
         executable="merlin2_room_patrol_fsm_action",
-        name="merlin2_action_node",
+        name="room_patrol_action_node",
         parameters=[{
             "dao_family": dao_family,
             "mongo_uri": mongo_uri

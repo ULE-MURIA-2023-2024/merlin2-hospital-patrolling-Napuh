@@ -61,7 +61,7 @@ class Merlin2RoomPatrolFSMAction(Merlin2FsmAction):
 
 
     def prepare_text(self, blackboard)->str:
-        room_name = blackboard.merlin2_action_goal.objects[0][-1]
+        # room_name = blackboard.merlin2_action_goal.objects[0][-1]
 
         blackboard.text = "Girado" # room patrolled
 
