@@ -18,7 +18,7 @@ class MissionNode(Merlin2FsmMissionNode):
 
     def __init__(self):
 
-        super().__init__("mission_node")
+        super().__init__("room_patrol_mission_node")
 
         self.add_state(
             "PREPARING_GOALS",

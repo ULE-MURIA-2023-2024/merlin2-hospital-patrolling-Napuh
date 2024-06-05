@@ -11,6 +11,7 @@ from yasmin import Blackboard
 from yasmin_ros.basic_outcomes import SUCCEED
 from yasmin import CbState
 import rclpy
+from geometry_msgs.msg import Twist
 import time
 
 class Merlin2RoomPatrolFSMAction(Merlin2FsmAction):
@@ -19,8 +20,11 @@ class Merlin2RoomPatrolFSMAction(Merlin2FsmAction):
         
         self._room = PddlObjectDto(room_type, "room")
         self._wp = PddlObjectDto(wp_type, "wp")
+        super().__init__("room_patrol_action_node")
         
-        super().__init__("patrol_room")
+        self.publisher = self.create_publisher(Twist, 'cmd_vel', 10)
+
+        
 
         tts_state = self.create_state(Merlin2BasicStates.TTS)
         # falta estado de girar -> usar el cmdvel y publicar pa q gire y esperar
@@ -48,14 +52,22 @@ class Merlin2RoomPatrolFSMAction(Merlin2FsmAction):
 
         # una accion tiene efectos, condiciones y parámetros
         
-    def rotate(self, blackboard)->str:
+    def rotate(self, blackboard) -> str:
+        self.get_logger().info("LLEGUE A ROTATE")
+        rate = self.create_rate(10)  # 10 Hz
 
-        #mandar mensaje de twist para q gire
-        #sperar
-        print("LLEGUE A ROTATE")
+        for _ in range(50): 
+            # girar durante 5 segundos
+            twist_msg = Twist()
+            twist_msg.angular.z = 1.0
+            self.publisher.publish(twist_msg)
+            rate.sleep()
 
-        # time.sleep(5)
-        #mandar mensaje de parar
+        for _ in range(50):  # Esperar 5 segundos
+            rate.sleep()
+
+        twist_msg.angular.z = 0.0
+        self.publisher.publish(twist_msg)
 
         return SUCCEED
 
@@ -65,7 +77,7 @@ class Merlin2RoomPatrolFSMAction(Merlin2FsmAction):
 
         blackboard.text = "Girado" # room patrolled
 
-        print("LLEGUE A PREPARE_TEXT")
+        self.get_logger().info("LLEGUE A PREPARE_TEXT")
 
         return SUCCEED
 
